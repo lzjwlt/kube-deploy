@@ -26,13 +26,7 @@
 
 
 - name: Add Docker yum repository
-  yum_repository:
-    name: Docker
-    description: Docker Repository
-    file: docker
-    baseurl: "{{ docker_url }}"
-    enabled: yes
-    gpgcheck: no
+  shell: "yum-config-manager --add-repo {{ docker_url }}"
 
 - name: Install docker
   yum:

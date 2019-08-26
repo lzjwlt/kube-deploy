@@ -5,7 +5,7 @@
   when: ansible_os_family == "Debian"
 
 - name: install docker and k8s (centos)
-  include_tasks: ubuntu.yml
+  include_tasks: centos.yml
   when: ansible_os_family == "RedHat"
 
 - name: Disable system swap
