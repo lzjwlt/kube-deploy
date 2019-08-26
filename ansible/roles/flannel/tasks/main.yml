@@ -1,0 +1,9 @@
+---
+
+- name: template flannel.yml
+  template:
+    src: flannel.yaml.j2
+    dest: "{{ tmp_dir }}/flannel.yaml"
+
+- name: apply flannel
+  shell: "kubectl apply -f {{ tmp_dir }}/flannel.yaml"

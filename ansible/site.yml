@@ -1,0 +1,16 @@
+- hosts:
+    - kube-master
+    - kube-node
+  roles:
+    - bootstrap
+
+- hosts:
+    - kube-master
+  roles:
+    - kube-master
+    - flannel
+
+- hosts:
+    - kube-node
+  roles:
+    - kube-node

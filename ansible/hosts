@@ -1,0 +1,5 @@
+[kube-master]
+v1
+[kube-node]
+v2
+v3

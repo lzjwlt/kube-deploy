@@ -1,0 +1,20 @@
+- name: Reset Kubernetes component
+  shell: "kubeadm reset --force"
+  register: reset_cluster
+
+- name: copy joincmd
+  copy:
+    src: "{{ lookup('env', 'HOME') }}/joincmd"
+    dest: "{{ tmp_dir }}/joincmd"
+
+
+- name: Join to Kubernetes cluster
+  shell: "sh {{ tmp_dir }}/joincmd"
+  ignore_errors: yes
+
+- name: Enable and check kubelet service
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
