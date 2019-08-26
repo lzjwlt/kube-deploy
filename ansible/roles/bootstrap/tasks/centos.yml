@@ -1,4 +1,17 @@
 ---
+- name: remove old docker
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-client
+    - docker-client-latest 
+    - docker-common 
+    - docker-latest 
+    - docker-latest-logrotate 
+    - docker-logrotate 
+    - docker-engine
 
 
 - name: set vars
