@@ -1,0 +1,65 @@
+---
+
+
+- name: set vars
+  set_fact:
+    docker_url: https://download.docker.com/linux/centos/docker-ce.repo
+    kube_base_url: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    kube_gpg: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    when: gfw is undefined or not gfw
+
+- name: set vars gfw
+  set_fact:
+    docker_url: http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+    kube_base_url: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+    kube_gpg: https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+  when: gfw is defined and gfw
+
+- name: install some tools
+  yum:
+    name: "{{item }}"
+    state: present
+  with_items:
+    - yum-utils 
+    - device-mapper-persistent-data 
+    - lvm2
+
+
+- name: Add Docker yum repository
+  yum_repository:
+    name: Docker
+    description: Docker Repository
+    file: docker
+    baseurl: "{{ docker_url }}"
+    enabled: yes
+    gpgcheck: no
+
+- name: Install docker
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-ce 
+    - docker-ce-cli 
+    - containerd.io
+
+- name: set k8s repo
+  shell: |
+    cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+    [kubernetes]
+    name=Kubernetes
+    baseurl= {{ kube_base_url }}
+    enabled=1
+    gpgcheck=1
+    repo_gpgcheck=1
+    gpgkey=  {{ kube_gpg }}
+    EOF
+
+- name: install k8s bin
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - kubectl
+    - kubeadm
+    - kubelet
