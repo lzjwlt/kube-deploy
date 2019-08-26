@@ -1,4 +1,8 @@
 ---
+- name: create tmp dir
+  file:
+    path: "{{ tmp_dir }}"
+    state: directory
 
 - name: install docker and k8s (ubuntu)
   include_tasks: ubuntu.yml
