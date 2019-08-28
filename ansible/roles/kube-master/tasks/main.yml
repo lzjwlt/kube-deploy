@@ -3,14 +3,9 @@
 - name: Reset Kubernetes component
   shell: "kubeadm reset --force"
 
-- name: set gfw
-  set_fact:
-    kube_init_opt: 
-
 - name: Init Kubernetes cluster
   when: gfw is undefined or not gfw
-  shell: |
-    "kubeadm init --service-cidr {{ service_cidr }} --pod-network-cidr {{ pod_network_cidr }} --ignore-preflight-errors=NumCPU"
+  shell: "kubeadm init --service-cidr {{ service_cidr }} --pod-network-cidr {{ pod_network_cidr }} --ignore-preflight-errors=NumCPU"
 
 - name: Init Kubernetes cluster gfw
   when: gfw is defined and gfw
