@@ -157,7 +157,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-{% if not gfw %}
+{% if gfw is undefined or not gfw %}
         image: quay.io/coreos/flannel:v0.11.0-amd64 
 {% else %}
         image: quay-mirror.qiniu.com/coreos/flannel:v0.11.0-amd64
@@ -175,7 +175,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-{% if not defined(gfw) or not gfw %}
+{% if gfw is undefined or not gfw %}
         image: quay.io/coreos/flannel:v0.11.0-amd64 
 {% else %}
         image: quay-mirror.qiniu.com/coreos/flannel:v0.11.0-amd64
